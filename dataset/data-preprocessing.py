@@ -17,14 +17,23 @@ data['gender'] = data['gender'].replace({'Male': 0, 'Female': 1})
 data['target'] = data['target'].replace({1: 0, 2: 1})
 
 # splitting it to train and test data
-train, test = train_test_split(data, test_size = 1/4, random_state = 2)
+X, y = data.iloc[:, :-1],  data.iloc[:, -1]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 1/4, random_state = 2)
 
 # feature scaling
 scaler = preprocessing.StandardScaler()
-train = pd.DataFrame(scaler.fit_transform(train))
-test = pd.DataFrame(scaler.transform(test))
+X_train = pd.DataFrame(scaler.fit_transform(X_train))
+X_test = pd.DataFrame(scaler.transform(X_test))
+
+# adding columns
+X_train.columns = ['age', 'gender', 'total_bilirubn', 'direct_bilirubin', 'alk_phos','sgpt', 'sgot', 'total_protiens', 'albumin', 'ratio_al_gl']
+X_test.columns = ['age', 'gender', 'total_bilirubn', 'direct_bilirubin', 'alk_phos','sgpt', 'sgot', 'total_protiens', 'albumin', 'ratio_al_gl']
 
 # saving 
 data.to_csv('dataset.csv', index = False)
-train.to_csv('train.csv', index = False)
-test.to_csv('test.csv', index = False)
+
+X_train.to_csv('X_train.csv', index = False)
+X_test.to_csv('X_test.csv', index = False)
+
+y_train.to_csv('y_train.csv', index = False)
+y_test.to_csv('y_test.csv', index = False)
