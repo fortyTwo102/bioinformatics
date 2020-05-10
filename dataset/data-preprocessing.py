@@ -21,15 +21,20 @@ data['target'] = data['target'].replace({1: 0, 2: 1})
 # this shows if there are any invalid 'NaN' values in the data
 # print(np.any(np.isnan(data)))
 
-# removing invalid values
-data = data.replace(" ",np.NaN)
-imp = SimpleImputer(missing_values=np.NaN, strategy='mean')
-imp.fit(data)
-data = pd.DataFrame(imp.transform(data))
 
 # splitting it to train and test data
 X, y = data.iloc[:, :-1],  data.iloc[:, -1]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 1/4, random_state = 2)
+
+# removing invalid values
+X_train = X_train.replace(" ",np.NaN)
+X_test = X_test.replace(" ",np.NaN)
+
+imp = SimpleImputer(missing_values=np.NaN, strategy='mean')
+imp.fit(X_train)
+X_train = pd.DataFrame(imp.transform(X_train))
+X_test = pd.DataFrame(imp.transform(X_test))
+
 
 # feature scaling
 scaler = preprocessing.StandardScaler()

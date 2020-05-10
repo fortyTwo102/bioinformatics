@@ -16,6 +16,7 @@ for i in range(1,11): # no. of columns at a time
 
 	for columns in combinations(headers,i): # all combinations of i columns
 
+		print(columns)
 		columns = list(columns)
 
 		X_train = pd.read_csv('X_train.csv')
@@ -45,11 +46,11 @@ for i in range(1,11): # no. of columns at a time
 
 			max_acc = accuracy
 			best_columns = columns
-			print("max till now", max_acc)
+			# print("max till now", max_acc)
 
 
 
-print("Accuracy: ", max_acc, ' with ', best_columns)
+# print("Accuracy: ", max_acc, ' with ', best_columns)
 
 # saving the selected dataset
 
