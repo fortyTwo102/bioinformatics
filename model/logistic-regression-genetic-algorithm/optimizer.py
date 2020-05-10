@@ -1,141 +1,137 @@
-"""
-Class that holds a genetic algorithm for evolving a network.
-
-Credit:
-    A lot of those code was originally inspired by:
-    http://lethain.com/genetic-algorithms-cool-name-damn-simple/
-"""
 from functools import reduce
 from operator import add
 import random
-from network import Network
+from model import Model
+random.seed(a=13361)
 
 class Optimizer():
-    """Class that implements genetic algorithm for MLP optimization."""
 
-    def __init__(self, nn_param_choices, retain=0.4,
+    def __init__(self, params, retain=0.4,
                  random_select=0.1, mutate_chance=0.2):
-        """Create an optimizer.
 
-        Args:
-            nn_param_choices (dict): Possible network paremters
-            retain (float): Percentage of population to retain after
-                each generation
-            random_select (float): Probability of a rejected network
-                remaining in the population
-            mutate_chance (float): Probability a network will be
-                randomly mutated
+        # create an optimizer.
 
-        """
+        # args:
+        #     params (dict): Possible model paremters
+        #     retain (float): Percentage of population to retain after
+        #         each generation
+        #     random_select (float): Probability of a rejected model
+        #         remaining in the population
+        #     mutate_chance (float): Probability a model will be
+        #         randomly mutated
+
+
         self.mutate_chance = mutate_chance
         self.random_select = random_select
         self.retain = retain
-        self.nn_param_choices = nn_param_choices
+        self.params = params
 
     def create_population(self, count):
-        """Create a population of random networks.
 
-        Args:
-            count (int): Number of networks to generate, aka the
-                size of the population
+        # create a population of random models.
 
-        Returns:
-            (list): Population of network objects
+        # args:
+        #     count (int): Number of models to generate, aka the
+        #         size of the population
 
-        """
+        # returns:
+        #     (list): Population of model objects
+
         pop = []
         for _ in range(0, count):
-            # Create a random network.
-            network = Network(self.nn_param_choices)
-            network.create_random()
 
-            # Add the network to our population.
-            pop.append(network)
+            # Create a random model.
+            model = Model(self.params)
+            model.create_random()
+
+            # Add the model to our population.
+            pop.append(model)
 
         return pop
 
     @staticmethod
-    def fitness(network):
-        """Return the accuracy, which is our fitness function."""
-        return network.accuracy
+    def fitness(model):
+
+        # Return the accuracy, which is our fitness function.
+        return model.accuracy
 
     def grade(self, pop):
-        """Find average fitness for a population.
 
-        Args:
-            pop (list): The population of networks
+        # find average fitness for a population.
 
-        Returns:
-            (float): The average accuracy of the population
+        # args:
+        #     pop (list): The population of models
 
-        """
-        summed = reduce(add, (self.fitness(network) for network in pop))
+        # returns:
+        #     (float): The average accuracy of the population
+
+        summed = reduce(add, (self.fitness(model) for model in pop))
         return summed / float((len(pop)))
 
     def breed(self, mother, father):
-        """Make two children as parts of their parents.
 
-        Args:
-            mother (dict): Network parameters
-            father (dict): Network parameters
+        # make two children as parts of their parents.
 
-        Returns:
-            (list): Two network objects
+        # args:
+        #     mother (dict): Model parameters
+        #     father (dict): Model parameters
 
-        """
+        # returns:
+        #     (list): Two model objects
+
         children = []
         for _ in range(2):
 
             child = {}
 
             # Loop through the parameters and pick params for the kid.
-            for param in self.nn_param_choices:
+            for param in self.params:
                 child[param] = random.choice(
-                    [mother.network[param], father.network[param]]
+                    [mother.model[param], father.model[param]]
                 )
 
-            # Now create a network object.
-            network = Network(self.nn_param_choices)
-            network.create_set(child)
+            # Now create a model object.
+            model = Model(self.params)
+            model.create_set(child)
 
             # Randomly mutate some of the children.
             if self.mutate_chance > random.random():
-                network = self.mutate(network)
+                model = self.mutate(model)
 
-            children.append(network)
+            children.append(model)
 
         return children
 
-    def mutate(self, network):
-        """Randomly mutate one part of the network.
+    def mutate(self, model):
+        """Randomly mutate one part of the model.
 
         Args:
-            network (dict): The network parameters to mutate
+            model (dict): The model parameters to mutate
 
         Returns:
-            (Network): A randomly mutated network object
+            (Model): A randomly mutated model object
 
         """
         # Choose a random key.
-        mutation = random.choice(list(self.nn_param_choices.keys()))
+        mutation = random.choice(list(self.params.keys()))
 
         # Mutate one of the params.
-        network.network[mutation] = random.choice(self.nn_param_choices[mutation])
+        model.model[mutation] = random.choice(self.params[mutation])
 
-        return network
+        return model
 
     def evolve(self, pop):
-        """Evolve a population of networks.
+        """Evolve a population of models.
 
         Args:
-            pop (list): A list of network parameters
+            pop (list): A list of model parameters
 
         Returns:
-            (list): The evolved population of networks
+            (list): The evolved population of models
 
         """
-        # Get scores for each network.
-        graded = [(self.fitness(network), network) for network in pop]
+        # Get scores for each model.
+        graded = [(self.fitness(model), model) for model in pop]
 
         # Sort on the scores.
         graded = [x[1] for x in sorted(graded, key=lambda x: x[0], reverse=True)]
@@ -143,7 +139,7 @@ class Optimizer():
         # Get the number we want to keep for the next gen.
         retain_length = int(len(graded)*self.retain)
 
-        # The parents are every network we want to keep.
+        # The parents are every model we want to keep.
         parents = graded[:retain_length]
 
         # For those we aren't keeping, randomly keep some anyway.
@@ -156,14 +152,14 @@ class Optimizer():
         desired_length = len(pop) - parents_length
         children = []
 
-        # Add children, which are bred from two remaining networks.
+        # Add children, which are bred from two remaining models.
         while len(children) < desired_length:
 
             # Get a random mom and dad.
             male = random.randint(0, parents_length-1)
             female = random.randint(0, parents_length-1)
 
-            # Assuming they aren't the same network...
+            # Assuming they aren't the same model...
             if male != female:
                 male = parents[male]
                 female = parents[female]

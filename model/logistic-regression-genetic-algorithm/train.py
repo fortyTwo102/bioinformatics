@@ -1,17 +1,9 @@
-"""
-Utility used by the Network class to actually train.
-
-Based on:
-    https://github.com/fchollet/keras/blob/master/examples/mnist_mlp.py
-
-"""
 import os
 import pandas as pd
 
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-
 
 
 def get_ILPD():
@@ -25,26 +17,21 @@ def get_ILPD():
 
     return X_train, X_test, y_train.values.ravel(), y_test.values.ravel()  
 
-def train_and_score(network, dataset):
-    """Train the model, return test loss.
+def train_and_score(model, dataset):
 
-    Args:
-        network (dict): the parameters of the network
-        dataset (str): Dataset to use for training/evaluating
-
-    """
 
     X_train, X_test, y_train, y_test = get_ILPD()
     
 
-    if network['solver'] == 'liblinear':
-        model = LogisticRegression(C = network['C'], tol = network['tol'], solver = network['solver'], penalty = network['penalty'], max_iter = 10000)
+    if model['solver'] == 'liblinear':
+        LR_model = LogisticRegression(C = model['C'], tol = model['tol'], solver = model['solver'], penalty = model['penalty'], max_iter = 10000, random_state = 13361)
 
-    elif network['solver'] in ['lbfgs', 'newton-cg', 'sag']:
-        model = LogisticRegression(C = network['C'], tol = network['tol'], solver = network['solver'], penalty = 'l2', max_iter = 10000)
+    elif model['solver'] in ['lbfgs', 'newton-cg', 'sag']:
+        LR_model = LogisticRegression(C = model['C'], tol = model['tol'], solver = model['solver'], penalty = 'l2', max_iter = 10000, random_state = 13361)
         
-    model.fit(X_train, y_train)
+    LR_model.fit(X_train, y_train)
+    y_pred = LR_model.predict(X_test)
 
-    score = model.score(X_test, y_test)
+    accuracy = accuracy_score(y_test, y_pred)
 
-    return score  # 1 is accuracy. 0 is loss.
+    return accuracy

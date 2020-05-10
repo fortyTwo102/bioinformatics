@@ -8,7 +8,6 @@ from sklearn.linear_model import LogisticRegression
 
 def predict(query, X_train, y_train):
 
-	# the features were learned by the Genetic Algorithm
 	model = LogisticRegression(C = 100000, tol = 0.1, penalty = 'l1', solver = 'liblinear', max_iter = 100000, random_state = 13361) 
 	model.fit(X_train, y_train.values.ravel())
 	y_pred = model.predict(query)
