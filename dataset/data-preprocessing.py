@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
 from sklearn.impute import SimpleImputer
+import pickle
 
 # loading the dataset 
 data = pd.read_csv('Indian Liver Patient Dataset (ILPD).csv')
@@ -40,6 +41,8 @@ X_test = pd.DataFrame(imp.transform(X_test))
 scaler = preprocessing.StandardScaler()
 X_train = pd.DataFrame(scaler.fit_transform(X_train))
 X_test = pd.DataFrame(scaler.transform(X_test))
+pickle.dump(scaler, open("scaler-obj.p", "wb"))
+
 
 # adding columns
 X_train.columns = ['age', 'gender', 'total_bilirubn', 'direct_bilirubin', 'alk_phos','sgpt', 'sgot', 'total_protein', 'albumin', 'ratio_al_gl']
