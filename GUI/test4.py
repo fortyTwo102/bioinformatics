@@ -1,6 +1,31 @@
 from tkinter import *
+import csv
+import pandas as pd
+import numpy as np
+import os
+from sklearn.metrics import accuracy_score
+from sklearn.linear_model import LogisticRegression
+from sklearn import preprocessing
 
 l1 = ['Male', 'Female']
+data_path = "D:\\cse\\dataset"
+
+
+def predict(query, X_train, y_train):
+    # the features were learned by the Genetic Algorithm
+    query = np.array(query).reshape(1, -1)
+
+    scaler = preprocessing.StandardScaler()
+    X_train = pd.DataFrame(scaler.fit_transform(X_train))
+    query = scaler.transform(query)
+
+    model = LogisticRegression(C=100000, tol=0.1, penalty='l1', solver='liblinear', max_iter=100000, random_state=13361)
+    model.fit(X_train, y_train.values.ravel())
+    y_pred = model.predict(query)
+
+    X_test = pd.read_csv(os.path.join(data_path, 'X_test_best.csv'))
+    safe, unsafe = model.predict_proba(np.array(X_test.iloc[0, :]).reshape(1, -1))[0]
+    return round(safe * 100, 2)
 
 
 def prediction():
@@ -10,11 +35,14 @@ def prediction():
     else:
         g = 1
 
-    query = [age.get(), g, dirbil.get(),
-             sgpt.get(), sgot.get(), alb.get()]
+    query = [age.get(), g, dirbil.get(), sgpt.get(), sgot.get(), alb.get()]
+    X_train = pd.read_csv(os.path.join(data_path, 'X_train_best.csv'))
+    y_train = pd.read_csv(os.path.join(data_path, 'y_train.csv'))
+
+    result=predict(query,X_train,y_train)
 
     t1.delete("1.0", END)
-    t1.insert(END, 'Probability of ' + Name.get() + ' Having Lung Disease is' + '%')
+    t1.insert(END, 'Probability of ' + Name.get() + ' Having Lung Disease is ' + str(result) + '%')
     t1.config(state='disable')
 
 
