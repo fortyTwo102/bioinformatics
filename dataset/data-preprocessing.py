@@ -39,7 +39,8 @@ X_test = pd.DataFrame(imp.transform(X_test))
 
 # feature scaling
 scaler = preprocessing.StandardScaler()
-X_train = pd.DataFrame(scaler.fit_transform(X_train))
+scaler.fit(X_train)
+X_train = pd.DataFrame(scaler.transform(X_train))
 X_test = pd.DataFrame(scaler.transform(X_test))
 pickle.dump(scaler, open("scaler-obj.p", "wb"))
 

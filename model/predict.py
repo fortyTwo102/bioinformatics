@@ -31,9 +31,8 @@ def predict(query):
 	query = scaler.transform([query])
 
 	query = query[0]
-	print(query)
-	# delete the padding
 
+	# delete the padding
 	query = np.delete(query, 2, 0)
 	query = np.delete(query, 3, 0)
 	query = np.delete(query, 5, 0)
@@ -48,6 +47,6 @@ def predict(query):
 	return round(safe*100, 2)
 
 
-query = [62, 0, 5.5, 64, 100, 0.74] 
+query = [1, 0, 5.5, 64, 100, 0.74] 
 
 print(predict(query))
