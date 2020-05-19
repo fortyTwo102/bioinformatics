@@ -103,15 +103,15 @@ class Optimizer():
         return children
 
     def mutate(self, model):
-        """Randomly mutate one part of the model.
+        # randomly mutate one part of the model.
 
-        Args:
-            model (dict): The model parameters to mutate
+        # rrgs:
+        #     model (dict): The model parameters to mutate
 
-        Returns:
-            (Model): A randomly mutated model object
+        # returns:
+        #     (Model): A randomly mutated model object
 
-        """
+        
         # Choose a random key.
         mutation = random.choice(list(self.params.keys()))
 
@@ -121,15 +121,15 @@ class Optimizer():
         return model
 
     def evolve(self, pop):
-        """Evolve a population of models.
+    	
+        # evolve a population of models.
 
-        Args:
-            pop (list): A list of model parameters
+        # args:
+        #     pop (list): A list of model parameters
 
-        Returns:
-            (list): The evolved population of models
+        # returns:
+        #     (list): The evolved population of models
 
-        """
         # Get scores for each model.
         graded = [(self.fitness(model), model) for model in pop]
 

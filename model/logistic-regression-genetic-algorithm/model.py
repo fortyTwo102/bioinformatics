@@ -29,3 +29,5 @@ class Model():
 
         logging.info(self.model)
         logging.info("Model accuracy: %.2f%%" % (self.accuracy * 100))
+
+        print("Model accuracy: %.2f%%" % (self.accuracy * 100))
