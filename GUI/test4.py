@@ -12,7 +12,7 @@ l1 = ['Male', 'Female']
 def predict(query):
     print(query)
 
-    data_path = "D:\\cse\\bioinformatics-master\\dataset"
+    data_path = "D:\\CSE\\Projects\\bioinformatics\\dataset"
     X_train = pd.read_csv(os.path.join(data_path, 'X_train_best.csv'))
     y_train = pd.read_csv(os.path.join(data_path, 'y_train.csv'))
 
@@ -39,7 +39,7 @@ def predict(query):
 
     query = query.reshape(1, -1)
 
-    model = LogisticRegression(C=100000, tol=0.1, penalty='l1', solver='liblinear', max_iter=100000, random_state=13361)
+    model = LogisticRegression(C=100000, tol=0.1, penalty='l1', solver='liblinear', max_iter=100000, random_state=18318)
     model.fit(X_train, y_train.values.ravel())
 
     safe, unsafe = model.predict_proba(query)[0]
@@ -49,9 +49,9 @@ def predict(query):
 def prediction():
     t1.config(state='normal')
     if gender.get() == 'Male':
-        g = 0
-    else:
         g = 1
+    else:
+        g = 0
 
     l2 = [age.get(), g, dirbil.get(), sgpt.get(), sgot.get(), alb.get()]
 

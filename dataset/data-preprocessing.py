@@ -37,6 +37,11 @@ X_train = pd.DataFrame(imp.transform(X_train))
 X_test = pd.DataFrame(imp.transform(X_test))
 
 
+# X_train.to_csv("X-train-raw.csv", index = False)
+# y_train.to_csv("y-train-raw.csv", index = False)
+# X_test.to_csv("X-test-raw.csv", index = False)
+# y_test.to_csv("y-test-raw.csv", index = False)
+
 # feature scaling
 scaler = preprocessing.StandardScaler()
 scaler.fit(X_train)
@@ -50,7 +55,7 @@ X_train.columns = ['age', 'gender', 'total_bilirubn', 'direct_bilirubin', 'alk_p
 X_test.columns = ['age', 'gender', 'total_bilirubn', 'direct_bilirubin', 'alk_phos','sgpt', 'sgot', 'total_protein', 'albumin', 'ratio_al_gl']
 
 # saving 
-data.to_csv('dataset.csv', index = False)
+# data.to_csv('dataset.csv', index = False)
 
 X_train.to_csv('X_train.csv', index = False)
 X_test.to_csv('X_test.csv', index = False)
