@@ -69,8 +69,8 @@ def print_models(models):
 
 def main():
 
-    generations = 50  # Number of times to evole the population.
-    population = 50  # Number of networks in each generation.
+    generations = 100  # Number of times to evole the population.
+    population = 100  # Number of networks in each generation.
     dataset = 'ILPD'
 
     params = {

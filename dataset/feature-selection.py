@@ -8,6 +8,7 @@ from itertools import combinations
 from sklearn import preprocessing
 from sklearn.linear_model import LogisticRegression
 
+print("Running Feature Selection Script!-------------------------------------------------------------------")
 max_acc = 0
 headers = ['age', 'gender', 'total_bilirubn', 'direct_bilirubin', 'alk_phos',\
 				'sgpt', 'sgot', 'total_protein', 'albumin', 'ratio_al_gl']
@@ -46,15 +47,17 @@ for i in range(1,11): # no. of columns at a time
 
 			max_acc = accuracy
 			best_columns = columns
-			print("max till now", max_acc)
+			print("Max Accuracy 'ill now", max_acc)
 
 
 
-print("Accuracy: ", max_acc, ' with ', best_columns)
+print("Best Accuracy: ", max_acc, ' is with ', best_columns)
 
 # saving the selected dataset
 
 X_train_best = X_train[best_columns].to_csv('X_train_best.csv', index = False) 
 X_test_best = X_test[best_columns].to_csv('X_test_best.csv', index = False) 
 
+
+print("...Done!")
 

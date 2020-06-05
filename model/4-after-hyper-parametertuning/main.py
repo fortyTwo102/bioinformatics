@@ -17,7 +17,7 @@ X_test = pd.read_csv('X_test_best.csv')
 y_train = pd.read_csv('y_train.csv').values.ravel()
 y_test = pd.read_csv('y_test.csv').values.ravel()
 
-
+print("Training the model....")
 model = LogisticRegression(C = 100000, tol = 0.1, penalty = 'l1', solver = 'liblinear', max_iter = 100000, random_state = 18318)
 model.fit(X_train, y_train)
 

@@ -4,9 +4,15 @@ from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
 from sklearn.impute import SimpleImputer
 import pickle
+import time
 
 # loading the dataset 
+
+print("Running Data-Preprocessing Script!-------------------------------------------------------------------")
+print("loading the dataset...")
+time.sleep(1)
 data = pd.read_csv('Indian Liver Patient Dataset (ILPD).csv')
+print(data)
 
 # adding feature names
 data.columns = ['age', 'gender', 'total_bilirubn', 'direct_bilirubin', 'alk_phos',\
@@ -14,6 +20,8 @@ data.columns = ['age', 'gender', 'total_bilirubn', 'direct_bilirubin', 'alk_phos
 
 
 # standardizing data format - Gender
+
+print("Cleaning up some columns...")
 data['gender'] = data['gender'].replace({'Male': 0, 'Female': 1})
 
 # standardizing data format - Target
@@ -43,6 +51,8 @@ X_test = pd.DataFrame(imp.transform(X_test))
 # y_test.to_csv("y-test-raw.csv", index = False)
 
 # feature scaling
+print("Scaling the dataset...")
+time.sleep(1)
 scaler = preprocessing.StandardScaler()
 scaler.fit(X_train)
 X_train = pd.DataFrame(scaler.transform(X_train))
@@ -66,3 +76,5 @@ y_test.to_csv('y_test.csv', index = False)
 
 
 # print(np.any(np.isnan(data))) # to check again
+
+print("..Done!")

@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, recall_score
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 
@@ -32,6 +32,6 @@ def train_and_score(model, dataset):
     LR_model.fit(X_train, y_train)
     y_pred = LR_model.predict(X_test)
 
-    accuracy = accuracy_score(y_test, y_pred)
+    accuracy = recall_score(y_test, y_pred)
 
     return accuracy
